@@ -1,0 +1,36 @@
+---
+title: "Motion_CM_Analysis"
+author: "Yiren"
+date: "12/8/2019"
+output: html_document
+---
+
+#Header1
+Analysis
+
+```
+library(ggplot2)
+```
+
+#set directory
+```
+library(rstudioapi)
+current_path <- getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
+print( getwd() )
+```
+cm analysis
+load flattened data
+```
+fileName = paste(getwd(),"/",motin_cm_flattened.tsv")
+df <- read.table(file = fileName, sep = '\t', header = TRUE)
+```
+
+check avarage
+```
+df
+
+```
+
+
+
