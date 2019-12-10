@@ -51,8 +51,21 @@ summary <- ddply(dfTail, c("direction","anchor"), summarise,
 )
 summary
 #CI plot
-ggplot(summary, aes(x=anchor*10, y=mean )) +
+ggplot(summary, aes(x=anchor, y=mean )) +
   geom_line(aes(color=direction))+
   geom_point(aes(color=direction, size =2))+
-  geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci,color=direction),  width=1) +
+  geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci,color=direction),  width=2) +
   theme(legend.position="top")
+
+#plot after adjustment, and regression
+summaryAdjust <- summary %>% mutate(adjustAnchor=ifelse(direction=="up", anchor-mean, anchor+mean))
+ggplot(summaryAdjust, aes(x=adjustAnchor, y=mean )) +
+  geom_point(aes(color=direction, size =2))+
+  geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci,color=direction),  width=2) +
+  
+  geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position="top")
+
+
+
+  
