@@ -1,4 +1,3 @@
-
 library(ggplot2)
 library(rstudioapi)
 library(plyr)
@@ -46,13 +45,18 @@ summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
   return(datac)
 }
 
-
-#Set work directory
+#set directory and load data
 current_path <- getActiveDocumentContext()$path 
 setwd(dirname(current_path ))
 print( getwd() )
+filePath <- getwd()
+fileName <- "/motion_cm_pilot1.tsv"
+filePath<- paste(filePath,fileName,sep='')
+filePath
+df <- read.table(file = filePath, sep = '\t',header = TRUE)
+head(df)
 
-df <- read.table(file = 'C:/Users/dyr42/OneDrive/WPI Study/motionExp/motion_cm_pilot1.tsv', sep = '\t',header = TRUE)
+#df <- subset(df,  sessionId!= "-LvC6pvzupGUM7zLqyNc")
 
 # check flattened data
 head(df$realPercentage,5)
@@ -100,11 +104,11 @@ ggplot(rotationsummary, aes(x=realPercentage, y=mean )) +
 
 #ci sum
 summaryAll <- ddply(df, c("vis"), summarise,
-                 N    = length(err),
-                 mean = mean(err),
-                 sd   = sd(err),
-                 se   = sd / sqrt(N),
-                 ci  = mean - qt(1 - ((1 - conf_level) / 2), N - 1) * se
+                    N    = length(err),
+                    mean = mean(err),
+                    sd   = sd(err),
+                    se   = sd / sqrt(N),
+                    ci  = mean - qt(1 - ((1 - conf_level) / 2), N - 1) * se
 )
 summaryAll
 #Plot overall CI
@@ -126,10 +130,11 @@ ggplot(df, aes(x=vis, y=diffraw,group =vis)) +
 df
 # Define the content and format of the tooltip in the "text" aesthetic
 p <- ggplot(df, aes(x=vis, y=diffraw, group=vis,
-                    text=paste("sessionId:",sessionId))) + 
-  geom_point(aes(color=vis))
+                    text=paste("sessionId:",sessionId,"time:",trialEndTime/1000-trialStartTime/1000))) + 
+  geom_point(aes(color=vis))+
+  facet_wrap(~sessionId)
 
 library(plotly)
 p <- ggplotly(p, tooltip="text")
 print(p)
-   
+
