@@ -2,7 +2,7 @@
 title: "Motion_CM_Analysis"
 author: "Yiren"
 date: "12/8/2019"
-output: github_document
+output: html_document
 ---
 
 #Header1
@@ -60,7 +60,7 @@ summary <- summary %>% mutate(err= log(mean+0.125,2))
 ```{r}
 ggplot(summary, aes(x=realPercentage, y=mean, group=vis)) +
   geom_line(aes(color=vis))+
-  geom_point(aes(color=vis, size =3))+
+  geom_point(aes(color=vis))+
   theme(legend.position="top")
 
 movingSummary <- subset(summary,  vis== "moving")
@@ -72,7 +72,7 @@ rotationSummary <- subset(summary,  vis== "rotation")
 ```{r}
 ggplot(movingSummary, aes(x=realPercentage, y=mean )) +
   geom_line(aes(color=vis))+
-  geom_point(aes(color=vis, size =3))+
+  geom_point(aes(color=vis, size =1))+
   geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci), colour="black", width=.03) +
   theme(legend.position="top")
 ```
